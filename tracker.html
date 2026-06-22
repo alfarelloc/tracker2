@@ -1,0 +1,1131 @@
+<div id="app-root"></div>
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    background: #0F172A;
+  }
+
+  #app-root,
+  #app-root * {
+    box-sizing: border-box;
+  }
+
+  #app-root {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: #0F172A;
+    color: #F8FAFC;
+    min-height: 100%;
+    padding: 28px 18px 60px;
+  }
+
+  #app-root .wrap {
+    max-width: 880px;
+    margin: 0 auto;
+  }
+
+  #app-root h1 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 2px;
+    color: #F8FAFC;
+    letter-spacing: -0.02em;
+  }
+
+  #app-root .sub {
+    font-size: 13px;
+    color: #94A3B8;
+    margin: 0 0 24px;
+  }
+
+  /* Indikator Status */
+  #app-root .status-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12.5px;
+    font-weight: 500;
+    color: #CBD5E1;
+    padding: 6px 14px;
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s;
+  }
+
+  #app-root .status-indicator .dot {
+    width: 8px;
+    height: 8px;
+    background-color: #22c55e;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.8);
+    transition: all 0.3s;
+  }
+
+  #app-root .status-indicator.saving .dot {
+    background-color: #eab308;
+    box-shadow: 0 0 8px rgba(234, 179, 8, 0.8);
+    animation: blink 1s infinite alternate;
+  }
+
+  #app-root .status-indicator.error .dot {
+    background-color: #ef4444;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.8);
+  }
+
+  @keyframes blink {
+    from {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0.4;
+    }
+  }
+
+  #app-root .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    margin-bottom: 22px;
+  }
+
+  #app-root .stat {
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 10px;
+    padding: 12px 14px;
+  }
+
+  #app-root .stat .lbl {
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #94A3B8;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  #app-root .stat .val {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 19px;
+    font-weight: 700;
+    color: #10B981;
+    line-height: 1.1;
+  }
+
+  #app-root .stat .val.peak {
+    color: #FB923C;
+  }
+
+  #app-root .stat .sm {
+    font-size: 11px;
+    color: #64748B;
+    margin-top: 2px;
+    font-weight: 500;
+  }
+
+  #app-root .card {
+    background: #1E293B;
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 18px;
+    margin-bottom: 18px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  #app-root .card h2 {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin: 0 0 14px;
+    color: #F8FAFC;
+  }
+
+  #app-root form.add-form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: flex-end;
+  }
+
+  #app-root .field {
+    flex: 1;
+    min-width: 130px;
+  }
+
+  #app-root .field label {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: #94A3B8;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  #app-root .field input {
+    width: 100%;
+    padding: 9px 11px;
+    border: 1.5px solid #475569;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    color: #F8FAFC;
+    background: #0F172A;
+  }
+
+  #app-root .field input:focus {
+    outline: none;
+    border-color: #10B981;
+    background: #1E293B;
+  }
+
+  #app-root button.add-btn {
+    background: #10B981;
+    color: #064E3B;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    transition: background 0.15s;
+  }
+
+  #app-root button.add-btn:hover {
+    background: #059669;
+    color: #ffffff;
+  }
+
+  #app-root .err {
+    color: #F87171;
+    font-size: 12.5px;
+    margin-top: 8px;
+    display: none;
+  }
+
+  #app-root .chart-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+
+  #app-root .chart-head h2 {
+    margin: 0;
+  }
+
+  #app-root .title-input {
+    border: none;
+    border-bottom: 1.5px dashed #475569;
+    background: transparent;
+    font-size: 12.5px;
+    color: #94A3B8;
+    padding: 2px 4px;
+    text-align: right;
+    flex: 1;
+    min-width: 140px;
+    max-width: 260px;
+    font-family: 'Inter', sans-serif;
+  }
+
+  #app-root .title-input:focus {
+    outline: none;
+    border-bottom-color: #10B981;
+    color: #F8FAFC;
+  }
+
+  #app-root .chart-wrap {
+    overflow-x: auto;
+  }
+
+  #app-root svg text {
+    font-family: 'Inter', sans-serif;
+  }
+
+  #app-root table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+
+  #app-root th {
+    text-align: left;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #94A3B8;
+    font-weight: 600;
+    padding: 6px 8px;
+    border-bottom: 1.5px solid #334155;
+  }
+
+  #app-root td {
+    padding: 9px 8px;
+    border-bottom: 1px solid #334155;
+    color: #F1F5F9;
+  }
+
+  #app-root tr:last-child td {
+    border-bottom: none;
+  }
+
+  #app-root .tag-peak {
+    background: #7C2D12;
+    color: #FDBA74;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 5px;
+    margin-left: 6px;
+  }
+
+  #app-root .del-btn {
+    background: none;
+    border: none;
+    color: #64748B;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 2px 6px;
+    line-height: 1;
+  }
+
+  #app-root .del-btn:hover {
+    color: #EF4444;
+  }
+
+  #app-root .empty {
+    text-align: center;
+    color: #94A3B8;
+    font-size: 13.5px;
+    padding: 30px 10px;
+  }
+
+  #app-root .footnote {
+    font-size: 11.5px;
+    color: #64748B;
+    text-align: center;
+    margin-top: 4px;
+  }
+
+  #app-root .reset-link {
+    font-size: 11.5px;
+    color: #64748B;
+    text-align: center;
+    margin-top: 14px;
+  }
+
+  #app-root .reset-link button {
+    background: none;
+    border: none;
+    color: #EF4444;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 11.5px;
+    padding: 0;
+  }
+
+  @media (max-width: 600px) {
+    #app-root .stats {
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    #app-root form.add-form {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    #app-root button.add-btn {
+      width: 100%;
+    }
+  }
+
+  /* Light Mode Overrides */
+  body.light, #app-root.light {
+    background: #F8FAFC;
+    color: #0F172A;
+  }
+  #app-root.light h1,
+  #app-root.light .card h2 {
+    color: #0F172A;
+  }
+  #app-root.light .sub {
+    color: #475569;
+  }
+  #app-root.light .status-indicator,
+  #app-root.light .stat,
+  #app-root.light .card,
+  #app-root.light th,
+  #app-root.light td {
+    background: #FFFFFF;
+    border-color: #E2E8F0;
+    color: #0F172A;
+  }
+  #app-root.light .stat .lbl,
+  #app-root.light .stat .sm {
+    color: #64748B;
+  }
+  #app-root.light input,
+  #app-root.light select {
+    background: #FFFFFF !important;
+    border-color: #CBD5E1 !important;
+    color: #0F172A !important;
+  }
+  #app-root.light table {
+    border-color: #E2E8F0;
+  }
+  #app-root.light th {
+    background: #F1F5F9;
+    color: #475569;
+    border-bottom: 2px solid #E2E8F0;
+  }
+  #app-root.light td {
+    border-bottom: 1px solid #F1F5F9;
+  }
+  #app-root.light .title-input {
+    background: transparent !important;
+    color: #0F172A !important;
+    border-color: transparent !important;
+    border-bottom-color: #CBD5E1 !important;
+  }
+  #app-root.light .title-input:hover,
+  #app-root.light .title-input:focus {
+    border-bottom-color: #10B981 !important;
+  }
+  #app-root.light .chart-head {
+    border-bottom-color: #E2E8F0 !important;
+  }
+  #app-root.light .add-btn {
+    color: #FFFFFF;
+  }
+  #app-root.light .empty {
+    color: #64748B;
+  }
+  #app-root.light .chart-wrap svg rect[fill="#1E293B"] {
+    fill: #FFFFFF;
+  }
+  #app-root.light .chart-wrap svg text[fill="#F1F5F9"],
+  #app-root.light .chart-wrap svg text[fill="#F8FAFC"] {
+    fill: #0F172A;
+  }
+  #app-root.light .chart-wrap svg text[fill="#64748B"],
+  #app-root.light .chart-wrap svg text[fill="#94A3B8"] {
+    fill: #475569;
+  }
+  #app-root.light .chart-wrap svg line[stroke="#334155"],
+  #app-root.light .chart-wrap svg line[stroke="#475569"],
+  #app-root.light .chart-wrap svg rect[stroke="#475569"] {
+    stroke: #CBD5E1;
+  }
+  #app-root.light .chart-wrap svg circle[stroke="#1E293B"] {
+    stroke: #FFFFFF;
+  }
+</style>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.23.5/babel.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link
+  href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=Inter:wght@400;500;600;700&display=swap"
+  rel="stylesheet">
+
+<script type="text/babel">
+  const { useState, useEffect, useRef } = React;
+  const { createClient } = window.supabase;
+
+  const SUPABASE_URL = 'https://vizikfldckemyssxukfz.supabase.co';
+  const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZpemlrZmxkY2tlbXlzc3h1a2Z6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIxMzA3OTQsImV4cCI6MjA5NzcwNjc5NH0.sutSyuq_c6qnnlr_nMJBlpRxjkg0-__iROEUnWzrWy0';
+  const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  function todayStr() {
+    const d = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  }
+
+  function nowTimeStr() {
+    const d = new Date();
+    const pad = n => String(n).padStart(2, '0');
+    return `${pad(d.getHours())}:${pad(d.getMinutes())}`;
+  }
+
+  const defaultData = [
+    { id: 'jop-1', date: '2026-06-02', time: '13:52', value: 35.62 },
+    { id: 'jop-2', date: '2026-06-03', time: '01:35', value: 11.72 },
+    { id: 'jop-3', date: '2026-06-03', time: '13:25', value: 11.83 },
+    { id: 'jop-4', date: '2026-06-04', time: '09:07', value: 19.70 },
+    { id: 'jop-5', date: '2026-06-04', time: '13:20', value: 4.22 },
+    { id: 'jop-6', date: '2026-06-08', time: '04:23', value: 87.05 },
+    { id: 'jop-7', date: '2026-06-08', time: '13:31', value: 9.13 },
+    { id: 'jop-8', date: '2026-06-10', time: '20:40', value: 55.15 },
+    { id: 'jop-9', date: '2026-06-11', time: '03:25', value: 6.75 },
+    { id: 'jop-10', date: '2026-06-13', time: '04:57', value: 49.53 },
+    { id: 'jop-11', date: '2026-06-16', time: '02:34', value: 69.62 },
+    { id: 'jop-12', date: '2026-06-18', time: '01:50', value: 47.27 },
+    { id: 'jop-13', date: '2026-06-19', time: '14:56', value: 37.10 },
+    { id: 'jop-14', date: '2026-06-20', time: '22:22', value: 31.43 }
+  ];
+
+  function fmtDateShort(iso) {
+    // iso: YYYY-MM-DD -> DD/MM/YY
+    const [y, m, d] = iso.split('-');
+    return `${d}/${m}/${y.slice(2)}`;
+  }
+
+  function parseCommand(cmd) {
+    cmd = cmd.trim().toLowerCase();
+    const regex = /^!(\d{1,2})\s+([a-z]+)(?:\s+(\d{4}))?\s+(\d{1,2})[\.:](\d{2})(?:\s+([\d\.,]+))?$/;
+    const match = cmd.match(regex);
+    if (!match) return { error: "Format salah. Coba: !18 april 08.30 atau !18 april 2020 08.30 15" };
+    
+    const [_, dStr, monthStr, yStr, hStr, mStr, valStr] = match;
+    
+    const months = {
+      jan: '01', januari: '01',
+      feb: '02', februari: '02',
+      mar: '03', maret: '03',
+      apr: '04', april: '04',
+      mei: '05',
+      jun: '06', juni: '06',
+      jul: '07', juli: '07',
+      agu: '08', agustus: '08',
+      sep: '09', september: '09',
+      okt: '10', oktober: '10',
+      nov: '11', november: '11',
+      des: '12', desember: '12'
+    };
+    
+    const mm = months[monthStr];
+    if (!mm) return { error: `Bulan "${monthStr}" tidak dikenal.` };
+    
+    const yyyy = yStr || new Date().getFullYear().toString();
+    const dd = dStr.padStart(2, '0');
+    const hh = hStr.padStart(2, '0');
+    const min = mStr.padStart(2, '0');
+    
+    let val = '';
+    if (valStr) {
+       val = valStr.replace(',', '.');
+    }
+    
+    return { date: `${yyyy}-${mm}-${dd}`, time: `${hh}:${min}`, value: val };
+  }
+
+  function App() {
+    const [entries, setEntries] = useState([]);
+    const [loaded, setLoaded] = useState(false);
+    const [date, setDate] = useState(todayStr());
+    const [time, setTime] = useState(nowTimeStr());
+    const [value, setValue] = useState('');
+    const [command, setCommand] = useState('');
+    const [error, setError] = useState('');
+    const [chartTitle, setChartTitle] = useState('JOP - June On Progress');
+    const [syncStatus, setSyncStatus] = useState('saved'); // 'saved', 'saving', 'error'
+    const [selectedYear, setSelectedYear] = useState(''); // 'YYYY'
+    const [selectedMonth, setSelectedMonth] = useState(''); // 'MM'
+    const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
+    const [theme, setTheme] = useState('dark');
+
+    useEffect(() => {
+      try {
+        const t = localStorage.getItem('theme');
+        if (t) setTheme(t);
+      } catch(e) {}
+    }, []);
+
+    useEffect(() => {
+      document.body.className = theme;
+      const appRoot = document.getElementById('app-root');
+      if (appRoot) appRoot.className = theme;
+      try { localStorage.setItem('theme', theme); } catch(e) {}
+    }, [theme]);
+
+    useEffect(() => {
+      (async () => {
+        // Ambil data dari Supabase
+        const { data, error } = await supabase
+          .from('tracker_data')
+          .select('*')
+          .order('date', { ascending: true })
+          .order('time', { ascending: true });
+
+        if (!error && data) {
+          if (data.length === 0) {
+            // Jika kosong, masukkan data default (JOP) ke Supabase
+            setSyncStatus('saving');
+            const uploadData = defaultData.map(e => ({
+              date: e.date,
+              time: e.time,
+              value: e.value
+            }));
+            const { data: inserted, error: insErr } = await supabase.from('tracker_data').insert(uploadData).select();
+            if (!insErr && inserted) {
+              setEntries(inserted);
+              setSyncStatus('saved');
+            } else {
+              setEntries([]);
+              setSyncStatus('error');
+            }
+          } else {
+            setEntries(data);
+          }
+        } else {
+          console.error('Gagal memuat data Supabase:', error);
+        }
+        try {
+          const res2 = await window.storage.get('chartTitle', false);
+          if (res2 && res2.value) setChartTitle(res2.value);
+        } catch (e) {
+          // belum ada judul custom, pakai default
+        }
+        setLoaded(true);
+      })();
+    }, []);
+
+    // Set default ke bulan dan tahun terakhir yang ada datanya
+    useEffect(() => {
+      if (entries.length > 0 && !selectedYear) {
+        const lastDate = entries[entries.length - 1].date; // 'YYYY-MM-DD'
+        setSelectedYear(lastDate.substring(0, 4));
+        setSelectedMonth(lastDate.substring(5, 7));
+      }
+    }, [entries, selectedYear]);
+
+    // Update judul grafik otomatis saat bulan/tahun berubah
+    useEffect(() => {
+      if (selectedMonth) {
+        const monthNamesEN = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+        const mIndex = parseInt(selectedMonth) - 1;
+        const monthEN = monthNamesEN[mIndex];
+        const initial = monthEN.charAt(0);
+        const yearStr = selectedYear ? ` ${selectedYear}` : '';
+        setChartTitle(`${initial}OP - ${monthEN} On Progress${yearStr}`);
+      } else if (selectedYear) {
+        setChartTitle(`Progress ${selectedYear}`);
+      } else {
+        setChartTitle('Progress Keseluruhan');
+      }
+    }, [selectedMonth, selectedYear]);
+
+    async function handleTitleChange(v) {
+      setChartTitle(v);
+      try {
+        await window.storage.set('chartTitle', v, false);
+      } catch (e) {
+        console.error('Gagal menyimpan judul', e);
+      }
+    }
+
+    async function handleAdd(e) {
+      e.preventDefault();
+      
+      let inputDate = date;
+      let inputTime = time;
+      let inputValue = value;
+
+      if (command.trim().startsWith('!')) {
+         const parsed = parseCommand(command);
+         if (parsed.error) {
+            setError(parsed.error);
+            return;
+         }
+         inputDate = parsed.date;
+         inputTime = parsed.time;
+         inputValue = parsed.value;
+      } else if (command.trim() !== '') {
+         setError('Perintah cepat harus diawali tanda ! (misal: !18 april 08.30)');
+         return;
+      }
+
+      if (!inputDate) { setError('Tanggal belum diisi.'); return; }
+      if (!inputTime) { setError('Waktu belum diisi.'); return; }
+      
+      let finalValue = 0;
+      
+      if (inputValue.trim() === '') {
+        // Auto-kalkulasi
+        if (entries.length === 0) {
+           finalValue = 24.00; // Default jika kosong total
+        } else {
+           const lastEntry = entries[entries.length - 1];
+           const [lastY, lastM, lastD] = lastEntry.date.split('-').map(Number);
+           const [lastHr, lastMin] = lastEntry.time.split(':').map(Number);
+           const lastDateObj = new Date(Date.UTC(lastY, lastM - 1, lastD, lastHr, lastMin, 0));
+           
+           const [currY, currM, currD] = inputDate.split('-').map(Number);
+           const [currHr, currMin] = inputTime.split(':').map(Number);
+           const currDateObj = new Date(Date.UTC(currY, currM - 1, currD, currHr, currMin, 0));
+           
+           const diffMs = currDateObj.getTime() - lastDateObj.getTime();
+           if (diffMs <= 0) {
+              setError(`Tanggal/Jam input harus lebih besar dari sesi terakhir (${fmtDateShort(lastEntry.date)} ${lastEntry.time}).`);
+              return;
+           }
+           finalValue = Math.round((diffMs / (1000 * 60 * 60)) * 100) / 100;
+        }
+      } else {
+        const num = parseFloat(inputValue.replace(',', '.'));
+        if (isNaN(num) || num < 0) { 
+          setError('Data harus berupa angka (atau biarkan kosong untuk hitung otomatis).'); 
+          return; 
+        }
+        finalValue = num;
+      }
+      
+      setError('');
+
+      setSyncStatus('saving');
+      const newEntry = { date: inputDate, time: inputTime, value: finalValue };
+      const { data, error } = await supabase.from('tracker_data').insert([newEntry]).select();
+
+      if (!error && data) {
+        setEntries(prev => [...prev, data[0]].sort((a, b) => {
+          if (a.date !== b.date) return a.date.localeCompare(b.date);
+          return (a.time || '').localeCompare(b.time || '');
+        }));
+        setSyncStatus('saved');
+      } else {
+        console.error(error);
+        setSyncStatus('error');
+      }
+      setValue('');
+      setCommand('');
+    }
+
+    async function handleDelete(id) {
+      setSyncStatus('saving');
+      const { error } = await supabase.from('tracker_data').delete().eq('id', id);
+      if (!error) {
+        setEntries(prev => prev.filter(en => en.id !== id));
+        setSyncStatus('saved');
+      } else {
+        setSyncStatus('error');
+      }
+    }
+
+    async function handleReset() {
+      if (window.confirm('Hapus semua data tracking? Tindakan ini tidak bisa dibatalkan.')) {
+        setSyncStatus('saving');
+        const { error } = await supabase.from('tracker_data').delete().neq('id', 0); // Hapus semua
+        if (!error) {
+          setEntries([]);
+          setSyncStatus('saved');
+        } else {
+          setSyncStatus('error');
+        }
+      }
+    }
+
+    // Filter per tahun dan bulan
+    const filteredEntries = entries.filter(e => {
+      const matchYear = selectedYear ? e.date.startsWith(selectedYear) : true;
+      const matchMonth = selectedMonth ? e.date.substring(5, 7) === selectedMonth : true;
+      return matchYear && matchMonth;
+    });
+
+    const hasData = filteredEntries.length > 0;
+    const values = filteredEntries.map(e => e.value);
+    const max = hasData ? Math.max(...values) : 0;
+    const avg = hasData ? values.reduce((a, b) => a + b, 0) / values.length : 0;
+    const peakIdx = hasData ? values.indexOf(max) : -1;
+
+    let statusText = 'Tersimpan';
+    if (syncStatus === 'saving') statusText = 'Menyimpan...';
+    if (syncStatus === 'error') statusText = 'Gagal Simpan';
+
+    return (
+      <div className="wrap">
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div>
+            <div className={`status-indicator ${syncStatus}`}>
+              <span className="dot"></span>
+              <span>☁️ {statusText}</span>
+            </div>
+            <h1 style={{ margin: 0, marginBottom: '24px' }}>Tracker</h1>
+          </div>
+          <button 
+            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
+            style={{
+              background: 'transparent',
+              border: `1px solid ${theme === 'dark' ? '#334155' : '#CBD5E1'}`,
+              color: theme === 'dark' ? '#F8FAFC' : '#0F172A',
+              padding: '6px 12px',
+              borderRadius: '20px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontSize: '13px',
+              fontWeight: 500,
+              fontFamily: 'Inter',
+              transition: '0.2s'
+            }}
+          >
+            {theme === 'dark' ? '☀️ Terang' : '🌙 Gelap'}
+          </button>
+        </div>
+
+
+
+        <div className="card">
+          <h2>Tambah Data</h2>
+          <form className="add-form" onSubmit={handleAdd}>
+            <div className="field" style={{ flex: '100%', marginBottom: '10px' }}>
+              <label>Quick Command</label>
+              <input
+                type="text"
+                value={command}
+                onChange={e => setCommand(e.target.value)}
+              />
+            </div>
+            <div className="field">
+              <label>Tanggal</label>
+              <input type="date" value={date} onChange={e => setDate(e.target.value)} />
+            </div>
+            <div className="field">
+              <label>Jam</label>
+              <input type="time" value={time} onChange={e => setTime(e.target.value)} />
+            </div>
+            <div className="field">
+              <label>Data (jam)</label>
+              <input
+                type="text"
+                inputMode="decimal"
+                placeholder="Kosongkan = Hitung otomatis"
+                value={value}
+                onChange={e => setValue(e.target.value)}
+              />
+            </div>
+            <button className="add-btn" type="submit">+ Tambah</button>
+          </form>
+          {error && <div className="err" style={{ display: 'block' }}>{error}</div>}
+        </div>
+
+        {entries.length > 0 && (
+          <div className="card">
+            <div className="chart-head" style={{ borderBottom: '1px solid #334155', paddingBottom: '14px', marginBottom: '0' }}>
+              <h2>Grafik Progres</h2>
+              <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+                <select
+                  value={selectedYear}
+                  onChange={e => setSelectedYear(e.target.value)}
+                  style={{
+                    background: '#0F172A', color: '#F8FAFC', border: '1px solid #475569',
+                    padding: '5px 10px', borderRadius: '6px', fontSize: '13px', fontFamily: 'Inter'
+                  }}
+                >
+                  <option value="">Semua Tahun</option>
+                  {Array.from({ length: new Date().getFullYear() - 2020 + 1 }, (_, i) => 2020 + i).map(y => (
+                    <option key={y} value={y}>{y}</option>
+                  ))}
+                </select>
+                <select
+                  value={selectedMonth}
+                  onChange={e => setSelectedMonth(e.target.value)}
+                  style={{
+                    background: '#0F172A', color: '#F8FAFC', border: '1px solid #475569',
+                    padding: '5px 10px', borderRadius: '6px', fontSize: '13px', fontFamily: 'Inter'
+                  }}
+                >
+                  <option value="">Semua Bulan</option>
+                  {['01','02','03','04','05','06','07','08','09','10','11','12'].map(mo => {
+                    const namaBulan = ['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+                    return <option key={mo} value={mo}>{namaBulan[parseInt(mo)-1]}</option>;
+                  })}
+                </select>
+                <input
+                  className="title-input"
+                  value={chartTitle}
+                  onChange={e => handleTitleChange(e.target.value)}
+                  placeholder="Judul grafik, mis. JOP - Juni"
+                />
+              </div>
+            </div>
+            <div className="chart-wrap" style={{ marginTop: '18px' }}>
+              {hasData ? (
+                <Chart entries={filteredEntries} avg={avg} max={max} peakIdx={peakIdx} title={chartTitle} />
+              ) : (
+                <div className="empty">Tidak ada data di bulan ini.</div>
+              )}
+            </div>
+          </div>
+        )}
+
+        <div className="card">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+            <h2 style={{ margin: 0 }}>Riwayat</h2>
+            <div style={{ display: 'flex', gap: '4px' }}>
+              <button
+                onClick={() => setSortOrder('asc')}
+                style={{
+                  background: sortOrder === 'asc' ? '#10B981' : '#1e293b',
+                  color: sortOrder === 'asc' ? '#ffffff' : '#94a3b8',
+                  border: '1px solid #334155',
+                  padding: '4px 10px',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  transition: '0.2s'
+                }}
+                title="Lama ke Baru (Asc)"
+              >
+                ▲
+              </button>
+              <button
+                onClick={() => setSortOrder('desc')}
+                style={{
+                  background: sortOrder === 'desc' ? '#10B981' : '#1e293b',
+                  color: sortOrder === 'desc' ? '#ffffff' : '#94a3b8',
+                  border: '1px solid #334155',
+                  padding: '4px 10px',
+                  borderRadius: '6px',
+                  cursor: 'pointer',
+                  fontSize: '14px',
+                  transition: '0.2s'
+                }}
+                title="Baru ke Lama (Desc)"
+              >
+                ▼
+              </button>
+            </div>
+          </div>
+          {!loaded ? (
+            <div className="empty">Memuat data...</div>
+          ) : !hasData ? (
+            <div className="empty">Belum ada data. Tambahkan sesi pertamamu di atas.</div>
+          ) : (
+            <table>
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Tanggal</th>
+                  <th>Jam</th>
+                  <th>Data (jam)</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody>
+                {(sortOrder === 'desc' ? [...filteredEntries].reverse() : filteredEntries).map((en, index) => {
+                  const i = sortOrder === 'desc' ? filteredEntries.length - 1 - index : index;
+                  return (
+                  <tr key={en.id}>
+                    <td>Periode {i + 1}</td>
+                    <td>
+                      {fmtDateShort(en.date)}
+                      {i === peakIdx && <span className="tag-peak">PEAK</span>}
+                    </td>
+                    <td>{en.time || '-'}</td>
+                    <td>{en.value.toFixed(2)}</td>
+                    <td style={{ textAlign: 'right' }}>
+                      <button className="del-btn" onClick={() => handleDelete(en.id)} title="Hapus">×</button>
+                    </td>
+                  </tr>
+                )})}
+              </tbody>
+            </table>
+          )}
+        </div>
+
+        <div className="stats">
+          <div className="stat">
+            <div className="lbl">Total Sesi</div>
+            <div className="val">{filteredEntries.length}</div>
+          </div>
+          <div className="stat">
+            <div className="lbl">Rata-rata</div>
+            <div className="val">{hasData ? avg.toFixed(2) : '–'}</div>
+            {hasData && <div className="sm">jam</div>}
+          </div>
+          <div className="stat">
+            <div className="lbl">Tertinggi</div>
+            <div className="val peak">{hasData ? max.toFixed(2) : '–'}</div>
+            {hasData && <div className="sm">{fmtDateShort(filteredEntries[peakIdx].date)}</div>}
+          </div>
+          <div className="stat">
+            <div className="lbl">Sesi Terakhir</div>
+            <div className="val">{hasData ? filteredEntries[filteredEntries.length - 1].value.toFixed(2) : '–'}</div>
+            {hasData && <div className="sm">{fmtDateShort(filteredEntries[filteredEntries.length - 1].date)}</div>}
+          </div>
+        </div>
+
+        <div className="reset-link">
+          <button onClick={handleReset}>Hapus semua data</button>
+        </div>
+        <div className="footnote">Data tersimpan otomatis untuk akunmu.</div>
+      </div>
+    );
+  }
+
+  function niceMax(v) {
+    if (v <= 0) return 10;
+    const mag = Math.pow(10, Math.floor(Math.log10(v)));
+    const norm = v / mag;
+    let step;
+    if (norm <= 1) step = 1;
+    else if (norm <= 2) step = 2;
+    else if (norm <= 5) step = 5;
+    else step = 10;
+    return step * mag;
+  }
+
+  function Chart({ entries, avg, max, peakIdx, title }) {
+    const { useState } = React;
+    const [zoomLevel, setZoomLevel] = useState(1);
+
+    const n = entries.length;
+    const padLeft = 52, padRight = 28, padTop = 64, padBottom = 90;
+    const colW = 78 * zoomLevel;
+    const W = Math.max(620, n * colW + padLeft + padRight);
+    const H = 420;
+    const plotW = W - padLeft - padRight;
+    const plotH = H - padTop - padBottom;
+
+    const minVal = 0;
+    const topVal = niceMax(max * 1.15 || 10);
+    const maxVal = topVal;
+
+    const xAt = i => padLeft + (n === 1 ? plotW / 2 : (i / (n - 1)) * plotW);
+    const yAt = v => padTop + plotH - ((v - minVal) / (maxVal - minVal)) * plotH;
+
+    const points = entries.map((e, i) => [xAt(i), yAt(e.value)]);
+    const pathD = points.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+    const avgY = yAt(avg);
+
+    // Hitung urutan kemunculan tanggal untuk label (2x), (3x), dst.
+    const dateOccurrences = {};
+    const entryOccurrences = entries.map(e => {
+      dateOccurrences[e.date] = (dateOccurrences[e.date] || 0) + 1;
+      return dateOccurrences[e.date];
+    });
+
+    // 5 gridline horizontal, angka rapi
+    const tickCount = 5;
+    const ticks = Array.from({ length: tickCount + 1 }, (_, i) => (maxVal / tickCount) * i);
+
+    const fullTitle = `${title || 'Progress'} (Periode 1 - ${n})`;
+
+    // legend box, pojok kanan atas
+    const legendW = 140, legendH = 50;
+    const legendX = W - padRight - legendW;
+    const legendY = padTop - 50;
+
+    return (
+      <div style={{ position: 'relative' }}>
+        <div style={{ position: 'absolute', right: '14px', top: '14px', display: 'flex', gap: '6px', zIndex: 10 }}>
+          <button 
+            onClick={() => setZoomLevel(prev => Math.max(0.5, prev - 0.25))} 
+            title="Zoom Out"
+            style={{ background: '#334155', color: '#F8FAFC', border: '1px solid #475569', width: '28px', height: '28px', borderRadius: '6px', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >-</button>
+          <button 
+            onClick={() => setZoomLevel(prev => Math.min(3, prev + 0.25))} 
+            title="Zoom In"
+            style={{ background: '#334155', color: '#F8FAFC', border: '1px solid #475569', width: '28px', height: '28px', borderRadius: '6px', cursor: 'pointer', fontSize: '16px', fontWeight: 'bold', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+          >+</button>
+        </div>
+        <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ display: 'block' }}>
+        <rect x="0" y="0" width={W} height={H} fill="#1E293B" />
+
+        <text x={W / 2} y={30} textAnchor="middle" fontSize="19" fontWeight="700" fill="#10B981">
+          {fullTitle}
+        </text>
+
+        {ticks.map((g, idx) => (
+          <g key={idx}>
+            <line x1={padLeft} x2={W - padRight} y1={yAt(g)} y2={yAt(g)} stroke="#334155" strokeWidth="1" strokeDasharray="2,3" />
+            <text x={padLeft - 10} y={yAt(g) + 4} textAnchor="end" fontSize="11" fill="#64748B">
+              {Math.round(g)}
+            </text>
+          </g>
+        ))}
+
+        <text
+          x={16} y={padTop + plotH / 2}
+          textAnchor="middle" fontSize="11.5" fontWeight="700" fill="#F1F5F9"
+          transform={`rotate(-90, 16, ${padTop + plotH / 2})`}
+        >
+          Jam Bertahan
+        </text>
+
+        <line x1={padLeft} x2={W - padRight} y1={avgY} y2={avgY} stroke="#FB923C" strokeWidth="2" strokeDasharray="7,5" opacity="0.9" />
+
+        <path d={pathD} fill="none" stroke="#10B981" strokeWidth="2.5" />
+
+        {points.map(([x, y], i) => {
+          const isPeak = i === peakIdx;
+          const occ = entryOccurrences[i];
+          const isMultiple = occ > 1;
+          const occText = isMultiple ? ` (${occ}x)` : '';
+          const dateStr = fmtDateShort(entries[i].date);
+          const timeStr = entries[i].time || '';
+
+          const labelColor = isMultiple ? '#F87171' : '#94A3B8';
+          const labelWeight = isMultiple ? '700' : '400';
+
+          // Logika pintar: Sembunyikan sebagian teks jika terlalu sempit (Zoom Out)
+          const isFirst = i === 0;
+          const isLast = i === n - 1;
+          const showTextAbove = colW >= 45 || isPeak || isFirst || isLast;
+          const showLabelBelow = colW >= 55 || isFirst || isLast || (colW >= 30 && i % 2 === 0) || (i % 4 === 0);
+
+          return (
+            <g key={i}>
+              <circle
+                cx={x} cy={y}
+                r={isPeak ? 9 : 5}
+                fill={isPeak ? '#FF4500' : '#10B981'}
+                stroke={isPeak ? '#1E293B' : 'none'}
+                strokeWidth={isPeak ? 1.5 : 0}
+              />
+              
+              {showTextAbove && (
+                <text x={x} y={y - (isPeak ? 18 : 11)} textAnchor="middle" fontSize="11.5" fontWeight="700" fill="#F8FAFC">
+                  {entries[i].value.toFixed(2)}
+                </text>
+              )}
+
+              {showLabelBelow && (
+                <g transform={`translate(${x}, ${H - padBottom + 15}) rotate(-45)`}>
+                  <text x={0} y={0} textAnchor="end" fontSize="11" fontWeight={isMultiple ? "700" : "600"} fill={labelColor}>
+                    Periode {i + 1}
+                  </text>
+                  <text x={0} y={14} textAnchor="end" fontSize="10" fontWeight={labelWeight} fill={labelColor}>
+                    {dateStr}{occText}
+                  </text>
+                  {timeStr && (
+                    <text x={0} y={28} textAnchor="end" fontSize="10" fontWeight={labelWeight} fill={labelColor}>
+                      {timeStr}
+                    </text>
+                  )}
+                </g>
+              )}
+            </g>
+          );
+        })}
+
+        <line x1={padLeft} x2={padLeft} y1={padTop} y2={H - padBottom} stroke="#475569" strokeWidth="1" />
+        <line x1={padLeft} x2={W - padRight} y1={H - padBottom} y2={H - padBottom} stroke="#475569" strokeWidth="1" />
+
+        <rect x={legendX} y={legendY} width={legendW} height={legendH} fill="#1E293B" stroke="#475569" strokeWidth="1" rx="4" />
+        <circle cx={legendX + 16} cy={legendY + 17} r="6" fill="#FF4500" stroke="#1E293B" strokeWidth="1" />
+        <text x={legendX + 30} y={legendY + 21} fontSize="11.5" fontWeight="600" fill="#F1F5F9">Peak</text>
+        <line x1={legendX + 8} x2={legendX + 24} y1={legendY + 37} y2={legendY + 37} stroke="#FB923C" strokeWidth="2" strokeDasharray="6,4" />
+        <text x={legendX + 30} y={legendY + 41} fontSize="11.5" fontWeight="600" fill="#F1F5F9">
+          Avg: {avg.toFixed(2)} jam
+        </text>
+      </svg>
+      </div>
+    );
+  }
+
+  const root = ReactDOM.createRoot(document.getElementById('app-root'));
+  root.render(<App />);
+</script>
